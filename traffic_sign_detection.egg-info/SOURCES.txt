@@ -1,0 +1,14 @@
+LICENSE
+README.md
+setup.py
+src/__init__.py
+src/pipeline/__init__.py
+src/pipeline/evaluate.py
+src/pipeline/train.py
+src/utils/__init__.py
+src/utils/io.py
+tests/test_config.py
+traffic_sign_detection.egg-info/PKG-INFO
+traffic_sign_detection.egg-info/SOURCES.txt
+traffic_sign_detection.egg-info/dependency_links.txt
+traffic_sign_detection.egg-info/top_level.txt
