@@ -4,11 +4,12 @@ Compact traffic-sign detection project for an Automated Driving System capstone.
 The model is trained on TT100K (50 classes) with YOLOv8n and exported to ONNX for Raspberry Pi CPU inference.
 
 ## Features
-- YOLOv8n training pipeline for TT100K
+- YOLOv8n training pipeline for TT100K (50 classes)
 - Config-driven workflow via YAML
-- ONNX export script for edge deployment
-- Clean repo layout for research and production iteration
-- Basic CI + tests scaffolding
+- Validation and single-image inference commands
+- ONNX export script for Raspberry Pi CPU deployment
+- Kaggle notebook + modular Python pipeline
+- CI + tests scaffolding
 
 ## Project Structure
 ```text
@@ -20,11 +21,13 @@ traffic-sign-detection-model/
 ├── notebooks/
 │   └── README.md
 ├── scripts/
-│   └── export_onnx.py
+│   ├── export_onnx.py
+│   └── infer_image.py
 ├── src/
 │   ├── __init__.py
 │   ├── pipeline/
 │   │   ├── __init__.py
+│   │   ├── evaluate.py
 │   │   └── train.py
 │   └── utils/
 │       ├── __init__.py
@@ -63,9 +66,19 @@ pip install -r requirements.txt
 python run.py --config configs/kaggle.yaml --mode train
 ```
 
-3) Export ONNX:
+3) Validate:
+```bash
+python run.py --config configs/kaggle.yaml --mode validate
+```
+
+4) Export ONNX:
 ```bash
 python run.py --config configs/kaggle.yaml --mode export
+```
+
+5) Inference on one image:
+```bash
+python run.py --config configs/kaggle.yaml --mode infer --image /path/to/image.jpg --conf 0.25
 ```
 
 ## Notes
