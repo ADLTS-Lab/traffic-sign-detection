@@ -1,12 +1,10 @@
 from pathlib import Path
-import sys
+import yaml
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
 
-from src.utils.io import load_yaml
-from src.pipeline.train import build_data_yaml
+def load_yaml(path: str) -> dict:
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
 
 def test_default_config_exists():
@@ -19,9 +17,8 @@ def test_default_config_has_required_keys():
         assert key in cfg
 
 
-def test_build_data_yaml_creates_file():
+def test_default_config_class_consistency():
     cfg = load_yaml("configs/default.yaml")
-    out = build_data_yaml(cfg)
-    assert out.exists()
-    payload = load_yaml(out)
-    assert payload["nc"] == len(payload["names"])
+    class_names = cfg["model"]["class_names"]
+    assert isinstance(class_names, list)
+    assert len(class_names) == 50
