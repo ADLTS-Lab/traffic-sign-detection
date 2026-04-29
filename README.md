@@ -1,7 +1,7 @@
 # Traffic Sign Detection: YOLOv8n on TT100K
 
 Compact traffic-sign detection project for an Automated Driving System capstone.  
-The model is trained on TT100K (50 classes) with YOLOv8n and exported to ONNX for Raspberry Pi CPU inference.
+The model is trained on TT100K (50 classes) with YOLOv8n and exported to ONNX.
 
 ## Features
 - YOLOv8n training pipeline for TT100K (50 classes)
@@ -18,8 +18,8 @@ traffic-sign-detection-model/
 ├── configs/
 │   ├── default.yaml
 │   └── kaggle.yaml
+├── data/
 ├── notebooks/
-│   └── README.md
 ├── scripts/
 │   ├── export_onnx.py
 │   └── infer_image.py
@@ -41,12 +41,12 @@ traffic-sign-detection-model/
 ```
 
 ## Dataset
-Expected TT100K path (Kaggle):
-- `/kaggle/input/datasets/braunge/tt100k/mydata`
+For local training, place the dataset under:
+- `data/tt100k/mydata`
 
-Dataset layout:
+Expected layout:
 ```text
-mydata/
+data/tt100k/mydata/
 ├── images/
 │   ├── train/
 │   └── val/
@@ -55,35 +55,45 @@ mydata/
     └── val/
 ```
 
+If you want to download the Kaggle version manually, use the Kaggle API and unzip it into `data/tt100k/mydata`. The Kaggle notebook can still use the Kaggle-hosted path directly through `configs/kaggle.yaml`.
+
+Kaggle path used by the notebook:
+```text
+/kaggle/input/datasets/braunge/tt100k/mydata
+```
+
 ## Quick Start
 1) Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2) Train:
+2) Download or copy the dataset so it exists at `data/tt100k/mydata`.
+
+3) Train locally:
 ```bash
-python run.py --config configs/kaggle.yaml --mode train
+python run.py --config configs/default.yaml --mode train
 ```
 
-3) Validate:
+4) Validate:
 ```bash
-python run.py --config configs/kaggle.yaml --mode validate
+python run.py --config configs/default.yaml --mode validate
 ```
 
-4) Export ONNX:
+5) Export ONNX:
 ```bash
-python run.py --config configs/kaggle.yaml --mode export
+python run.py --config configs/default.yaml --mode export
 ```
 
-5) Inference on one image:
+6) Inference on one image:
 ```bash
-python run.py --config configs/kaggle.yaml --mode infer --image /path/to/image.jpg --conf 0.25
+python run.py --config configs/default.yaml --mode infer --image /path/to/image.jpg --conf 0.25
 ```
 
 ## Notes
-- For demonstration, set `epochs: 5`; for production, use `30-50`.
-- The model is YOLOv8n for a speed/accuracy trade-off on edge devices.
+- The default config auto-selects the device when possible, so it works on GPU machines and CPU-only machines.
+- If you are on Kaggle, use `configs/kaggle.yaml` instead of the local default.
+- Training resumes from the latest checkpoint in `runs/detect/tt100k_training/yolov8n_30e/weights/last.pt` when that file exists.
 
 ## License
 Apache-2.0. See `LICENSE`.

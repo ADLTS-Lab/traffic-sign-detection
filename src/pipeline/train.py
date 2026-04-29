@@ -37,20 +37,27 @@ def train_model(config: dict):
 
     validate_data_layout(config)
     data_yaml_path = build_data_yaml(config)
-    model = YOLO(config["model"]["weights"])
     tr = config["train"]
-    model.train(
-        data=str(data_yaml_path),
-        epochs=tr["epochs"],
-        imgsz=tr["imgsz"],
-        batch=tr["batch"],
-        device=tr["device"],
-        workers=tr["workers"],
-        project=tr["project"],
-        name=tr["name"],
-        exist_ok=tr["exist_ok"],
-    )
-    return Path(tr["project"]) / tr["name"] / "weights" / "best.pt"
+    run_dir = Path(tr["project"]) / tr["name"]
+    last_weights = run_dir / "weights" / "last.pt"
+
+    if last_weights.exists():
+        model = YOLO(str(last_weights))
+        model.train(resume=True)
+    else:
+        model = YOLO(config["model"]["weights"])
+        model.train(
+            data=str(data_yaml_path),
+            epochs=tr["epochs"],
+            imgsz=tr["imgsz"],
+            batch=tr["batch"],
+            device=tr["device"],
+            workers=tr["workers"],
+            project=tr["project"],
+            name=tr["name"],
+            exist_ok=tr["exist_ok"],
+        )
+    return run_dir / "weights" / "best.pt"
 
 
 def export_onnx(config: dict):

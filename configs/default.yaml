@@ -3,7 +3,7 @@ project:
   output_dir: ./runs/tt100k
 
 data:
-  root: /kaggle/input/datasets/braunge/tt100k/mydata
+  root: ./data/tt100k/mydata
   train: images/train
   val: images/val
   test: images/val
@@ -63,13 +63,13 @@ model:
     - il110
 
 train:
-  epochs: 5
+  epochs: 30
   imgsz: 640
   batch: 16
   workers: 4
-  device: 0
-  project: tt100k_training
-  name: yolov8n_demo
+  device: null
+  project: ./runs/detect/tt100k_training
+  name: yolov8n_30e
   exist_ok: true
 
 export:

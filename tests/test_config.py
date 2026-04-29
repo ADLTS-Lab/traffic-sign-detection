@@ -22,3 +22,8 @@ def test_default_config_class_consistency():
     class_names = cfg["model"]["class_names"]
     assert isinstance(class_names, list)
     assert len(class_names) == 50
+
+
+def test_default_config_uses_local_dataset_path():
+    cfg = load_yaml("configs/default.yaml")
+    assert cfg["data"]["root"] == "./data/tt100k/mydata"
